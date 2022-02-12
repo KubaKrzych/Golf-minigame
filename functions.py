@@ -1,4 +1,6 @@
 import math
+import sys
+from settings import *
 
 
 def distance(from_pos: tuple, to_pos: tuple):
@@ -27,11 +29,24 @@ def angle(v1, v2):
 
 # Depending on the vector, returns the angle quarter -1
 def vector_quarter(v):
-    if v[0] > 0 and v[1] > 0:
-        return 0
-    elif v[1] > 0 > v[0]:
+    if v[0] > 0 > v[1]:
         return 1
-    elif v[0] > 0 > v[1]:
+    elif v[0] <= v[1] < 0:
+        return 2
+    elif v[0] < 0 < v[1]:
         return 3
     else:
-        return 2
+        return 4
+
+def text_blit(text, x, y, color='Black'):
+    display = pygame.display.get_surface()
+    text = FONT.render(text, False, color)
+    text_rect = text.get_rect(center=(x, y))
+    display.blit(text, text_rect)
+
+
+def quit_all():
+    pygame.quit()
+    sys.exit()
+
+
