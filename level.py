@@ -19,14 +19,16 @@ class Level:
         # Instances
         self.prev_time = time.time()
         self.score = 0
+        self.end = False
+        self.ball_in_hole = False
 
         # Sprites
         self.player = pygame.sprite.GroupSingle()
         self.hole = pygame.sprite.GroupSingle()
         self.obstacles = pygame.sprite.Group()
         self.cosmetic = pygame.sprite.Group()
-
         self.cosmetic.add(Cosmetic((0, 0), background))
+
         for row in range(len(file)):
             for col in range(len(file[0])):
                 if file[row][col] == 'P':
@@ -45,6 +47,87 @@ class Level:
                 else:
                     continue
 
+    def run(self):
+        # Check for ball in hole, if so, delete all objects
+        if self.end:
+            return self.end_level()
+
+        # Input handling
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                quit_all()
+        mouse_buttons = pygame.mouse.get_pressed()
+
+        # Delta time
+        now = time.time()
+        dt = now - self.prev_time
+        self.prev_time = now
+
+        # Drawing surfaces
+        self.draw()
+
+        # Processes
+        if Block.get_bottom(self.hole.sprite.rect, 2*TILE, 10).colliderect(self.player.sprite.rect) \
+                and not self.player.sprite.in_move:
+            self.ball_in_hole = True
+            self.end = True
+        self.player.update(self.obstacles, self.player, dt, mouse_buttons, self.end)
+        pygame.display.update()
+        return True
+
+    def draw(self):
+        self.cosmetic.draw(self.screen)
+        self.obstacles.draw(self.screen)
+        self.hole.draw(self.screen)
+        self.player.draw(self.screen)
+
+    def options(self):
+        menu_rect = text_blit('MAIN MENU', WIDTH/2, HEIGHT - 200, 'White')
+        options_text = TITLE.render("OPTIONS", False, "White")
+        options_rect = options_text.get_rect(center=(WIDTH/2, 200))
+        while True:
+            # Input handling
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quit_all()
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        return
+
+            self.screen.fill((20, 60, 60))
+            self.screen.blit(options_text, options_rect)
+
+            # Main menu button
+            if menu_rect.collidepoint(pygame.mouse.get_pos()):
+                text_blit('MAIN MENU', WIDTH/2, HEIGHT - 200, 'Cyan')
+                if pygame.mouse.get_pressed()[0]:
+                    self.end = True
+                    break  # TODO Tutaj musi byc inne wyjscie, bez fade away
+            else:
+                text_blit('MAIN MENU', WIDTH / 2, HEIGHT - 200, 'White')
+
+            pygame.display.update()
+
+    # Screen fades away if the ball is in hole, but if the ball is not in hole
+    # then the frame simply changes (user went back to main menu)
+    def end_level(self):
+        if self.ball_in_hole:
+            fade = pygame.Surface((WIDTH, HEIGHT))
+            fade.fill(('White'))
+            for alpha in range(255):
+                fade.set_alpha(alpha)
+                self.draw()
+                self.screen.blit(fade, (0, 0))
+                pygame.display.update()
+                pygame.time.delay(5)
+
+        del self.player
+        del self.obstacles
+        del self.hole
+        del self.cosmetic
+        del self
+        return False
+
     @staticmethod
     def level_setup(path):
         file = open(path)
@@ -53,44 +136,3 @@ class Level:
         for row in csvreader:
             rows.append(row)
         return rows
-
-    def run(self):
-        mouse_buttons = pygame.mouse.get_pressed()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                quit_all()
-            if event.type == pygame.KEYDOWN:
-                if event.type == pygame.K_ESCAPE:
-                    # Level.options()
-                    pass
-
-        # Delta time
-        now = time.time()
-        dt = now - self.prev_time
-        self.prev_time = now
-
-        # Drawing surfaces
-        self.cosmetic.draw(self.screen)
-        self.obstacles.draw(self.screen)
-        self.hole.draw(self.screen)
-
-        # Processes
-        self.player.update(self.obstacles, self.player, dt, mouse_buttons)
-        if self.player.sprite.rect.colliderect(self.hole.sprite.rect) and not self.player.sprite.in_move:
-            print(123)
-        self.clock.tick(FPS)
-
-
-    @staticmethod
-    def options():
-        screen = pygame.display.get_surface()
-        while True:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    quit_all()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_ESCAPE:
-                        return
-            screen.fill((20, 60, 60))
-            text_blit('OPTIONS', WIDTH/2, 200, 'White')
-            pygame.display.update()
