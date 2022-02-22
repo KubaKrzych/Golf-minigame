@@ -7,7 +7,12 @@ from objects import *
 
 
 class Level:
+
     def __init__(self, num):
+        """
+
+        :param num:
+        """
         # Setup
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.get_surface()
@@ -79,8 +84,9 @@ class Level:
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     self.options()
-                if event.key == pygame.K_r :
+                if event.key == pygame.K_r:
                     self.__init__(self.level_number)
+
         mouse_buttons = pygame.mouse.get_pressed()
 
         # Delta time
@@ -123,17 +129,29 @@ class Level:
     def draw(self):
         self.cosmetic.draw(self.screen)
         self.hole.draw(self.screen)
-        self.flag.draw(self.screen)
         self.obstacles.draw(self.screen)
         self.coin.draw(self.screen)
+        self.flag.draw(self.screen)
         self.player.draw(self.screen)
-        self.draw_panel((WIDTH/2, 100), "{} hits".format(self.ball.hit_count))
+        if self.level_number == 3:
+            self.draw_panel((WIDTH - 250, 100), "{} hits".format(self.ball.hit_count))
+        else:
+            self.draw_panel((WIDTH / 2, 100), "{} hits".format(self.ball.hit_count))
+        debug(length(self.ball.vector))
 
-    def update_all(self, obstacle_group, player_gorup, delta_time, mouse_but, end):
-        self.player.update(obstacle_group, player_gorup, delta_time, mouse_but, end)
-        self.coin.update(player_gorup)
-        self.hole.update(self.coin_picked)
+    def update_all(self, obstacle_group, player_group, delta_time, mouse_but, end):
+        self.player.update(obstacle_group, player_group, delta_time, mouse_but, end)
         self.flag.update()
+        self.coin.update(player_group)
+        self.hole.update(self.coin_picked)
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    self.__init__(self.level_number)
+                if event.key == pygame.K_ESCAPE:
+                    self.options()
+            if event.type == pygame.QUIT:
+                quit_all()
 
     def summary_screen(self):
         new_highscore = self.set_highscore()
@@ -186,6 +204,9 @@ class Level:
     # then the frame simply changes (user went back to main menu)
     def end_level(self):
         if self.ball_in_hole:
+            # TODO stop theme music
+            pygame.mixer.music.load('Other/hole_sound.wav')
+            pygame.mixer.music.play(0)
             fade = pygame.Surface((WIDTH, HEIGHT))
             fade.fill(('Black'))
             for alpha in range(255):
@@ -212,13 +233,15 @@ class Level:
             fade.set_alpha(alpha)
             self.draw()
             self.screen.blit(fade, (0, 0))
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    quit_all()
             pygame.display.update()
 
     def get_highscore(self):
         try:
             with open('Other/hs.txt', 'r') as file:
                 lines = file.readlines()
-                print(lines)
                 self.highscore = int(lines[self.level_number - 1].strip())
 
         # The file doesn't exist

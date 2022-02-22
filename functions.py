@@ -63,3 +63,4 @@ def text_blit(text, x, y, color='Black'):
 def quit_all():
     pygame.quit()
     sys.exit()
+

@@ -11,6 +11,7 @@ class Golf:
 
         # Setup
         pygame.init()
+        pygame.mixer.init()
         pygame.display.set_caption("Golf minigame")
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
         self.font = pygame.font.Font('Other/pixelart.ttf', 60)
@@ -88,9 +89,9 @@ class Golf:
             self.screen.blit(level_1, rect_1)
             if rect_1.collidepoint(pygame.mouse.get_pos()):
                 # Mouse collides with rect
-                level_1 = FONT.render("LEVEL 1", False, (225,90,120))
+                level_1 = FONT.render("LEVEL 1", False, '#DFAD69')
                 rect_1 = level_1.get_rect(center=(WIDTH/2, 450))
-                pygame.draw.rect(self.screen, (225,90,120), level_background, 4)
+                pygame.draw.rect(self.screen, '#DFAD69', level_background, 4)
                 if pygame.mouse.get_pressed()[0]:
                     self.running = True
                     self.level_n = 1
@@ -98,9 +99,9 @@ class Golf:
                     self.run()
             else:
                 # Mouse doesn't collide with rect
-                level_1 = FONT.render("LEVEL 1", False, (175,50,60))
+                level_1 = FONT.render("LEVEL 1", False, '#F5E663')
                 self.screen.blit(level_1, rect_1)
-                pygame.draw.rect(self.screen, (175,50,60), level_background, 4)
+                pygame.draw.rect(self.screen, '#F5E663', level_background, 4)
 
             # Second level
             level_background = pygame.rect.Rect(rect_2.x - 5, rect_2.y - 5, rectangle_width, rectangle_height)
@@ -130,9 +131,9 @@ class Golf:
             self.screen.blit(level_3, rect_3)
             if rect_3.collidepoint(pygame.mouse.get_pos()):
                 # Mouse collides with rect
-                level_3 = FONT.render("LEVEL 3", False, (55, 255, 90))
+                level_3 = FONT.render("LEVEL 3", False, '#C1DBB3')
                 rect_3 = level_3.get_rect(center=(WIDTH / 2, 650))
-                pygame.draw.rect(self.screen, (55, 255, 90), level_background, 4)
+                pygame.draw.rect(self.screen, '#C1DBB3', level_background, 4)
                 if pygame.mouse.get_pressed()[0]:
                     self.running = True
                     self.level_n = 3
@@ -140,9 +141,9 @@ class Golf:
                     self.run()
             else:
                 # Mouse doesn't collide with rect
-                level_3 = FONT.render("LEVEL 3", False, (20, 200, 80))
+                level_3 = FONT.render("LEVEL 3", False, '#FAEDCA')
                 self.screen.blit(level_3, rect_3)
-                pygame.draw.rect(self.screen, (20, 200, 80), level_background, 4)
+                pygame.draw.rect(self.screen, '#FAEDCA', level_background, 4)
 
             pygame.display.update()
 
