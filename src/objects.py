@@ -1,14 +1,10 @@
-import os
-import time
-
 from math import cos, sin, radians
 
 import pygame.mixer_music
 
-from functions import *
-from settings import *
-from os import path
-from debug import debug
+from src.misc.functions import *
+from Data.settings import *
+from os import path, getcwd
 
 
 class Player(pygame.sprite.Sprite):
@@ -21,20 +17,20 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
 
         # Images and sounds
-        frame_1 = pygame.image.load('Images/ball_1.png')
-        frame_2 = pygame.image.load('Images/ball_2.png')
-        frame_3 = pygame.image.load('Images/ball_3.png')
+        frame_1 = pygame.image.load(getcwd() + '/Images/Ball/ball_1.png')
+        frame_2 = pygame.image.load(getcwd() + '/Images/Ball/ball_2.png')
+        frame_3 = pygame.image.load(getcwd() + '/Images/Ball/ball_3.png')
         pygame.mixer.set_num_channels(10)
         self.image_index = 0
         self.screen = pygame.display.get_surface()
         self.frames = [frame_1, frame_2, frame_3]
         self.image = frame_1
-        self.sounds = {"strong_hit": pygame.mixer.Sound('Other/strong_hit.wav'),
-                       "light_hit": pygame.mixer.Sound('Other/light_hit.wav'),
-                       "hard_bounce": pygame.mixer.Sound('Other/hard_bounce.wav'),
-                       "mid_bounce":  pygame.mixer.Sound('Other/mid_bounce.wav'),
-                       "light_bounce": pygame.mixer.Sound('Other/light_bounce.wav'),
-                       "ball_roll": pygame.mixer.Sound('Other/ball_roll.wav')
+        self.sounds = {"strong_hit": pygame.mixer.Sound(getcwd() + '/Audio/strong_hit.wav'),
+                       "light_hit": pygame.mixer.Sound(getcwd() + '/Audio/light_hit.wav'),
+                       "hard_bounce": pygame.mixer.Sound(getcwd() + '/Audio/hard_bounce.wav'),
+                       "mid_bounce":  pygame.mixer.Sound(getcwd() + '/Audio/mid_bounce.wav'),
+                       "light_bounce": pygame.mixer.Sound(getcwd() + '/Audio/light_bounce.wav'),
+                       "ball_roll": pygame.mixer.Sound(getcwd() + '/Audio/ball_roll.wav')
                        }
         pygame.mixer.Channel(0).set_volume(0.3)
 
@@ -204,17 +200,17 @@ class Player(pygame.sprite.Sprite):
     def bounce_sound(self, side_collision: bool):
         # Played sounds depend on current state, side_collision is True if ball hits a block from the left or right
         if self.in_air:
-            if length(self.vector) >= HARD_BOUNCE_VECTORL:
+            if length(self.vector) >= HARD_BOUNCE_VECTOR_LEN:
                 pygame.mixer.Channel(3).play(self.sounds["hard_bounce"])
-            elif length(self.vector) >= MID_BOUNCE_VECTORL:
+            elif length(self.vector) >= MID_BOUNCE_VECTOR_LEN:
                 pygame.mixer.Channel(3).play(self.sounds["mid_bounce"])
             else:
                 pygame.mixer.Channel(3).play(self.sounds["light_bounce"])
         else:
             if side_collision:
-                if length(self.vector) >= HARD_BOUNCE_VECTORL:
+                if length(self.vector) >= HARD_BOUNCE_VECTOR_LEN:
                     pygame.mixer.Channel(3).play(self.sounds["hard_bounce"])
-                elif length(self.vector) >= MID_BOUNCE_VECTORL:
+                elif length(self.vector) >= MID_BOUNCE_VECTOR_LEN:
                     pygame.mixer.Channel(3).play(self.sounds["mid_bounce"])
                 else:
                     pygame.mixer.Channel(3).play(self.sounds["light_bounce"])
@@ -235,7 +231,7 @@ class Player(pygame.sprite.Sprite):
             # Pure math, don't bother if trigonometry is hell to you
             self.vector[0] = cos(self.current_angle_of_move()) * MAX_VECTOR_LENGTH
             self.vector[1] = sin(self.current_angle_of_move()) * MAX_VECTOR_LENGTH
-        if length(self.vector) >= STRONG_HIT_VECTORL:
+        if length(self.vector) >= STRONG_HIT_VECTOR_LEN:
             pygame.mixer.Channel(1).play(self.sounds["strong_hit"])
         else:
             pygame.mixer.find_channel(1).play(self.sounds["light_hit"])
@@ -250,11 +246,11 @@ class Block(pygame.sprite.Sprite):
     def __init__(self, type_of_block, position: tuple, num: int):
         super().__init__()
         if type_of_block == 'B':
-            self.image = pygame.image.load('Images/block_{}.png'.format(num))
+            self.image = pygame.image.load('Images/Blocks/block_{}.png'.format(num))
         elif type_of_block == 'W':
-            self.image = pygame.image.load('Images/wall_{}.png'.format(num))
+            self.image = pygame.image.load('Images/Blocks/wall_{}.png'.format(num))
         elif type_of_block == 'G':
-            self.image = pygame.image.load('Images/ground_{}.png'.format(num))
+            self.image = pygame.image.load('Images/Blocks/ground_{}.png'.format(num))
         else:
             self.image = None
         self.rect = self.image.get_rect(topleft=position)
@@ -284,7 +280,7 @@ class Block(pygame.sprite.Sprite):
 class Hole(pygame.sprite.Sprite):
     def __init__(self, position: tuple):
         super().__init__()
-        self.image = pygame.image.load('Images/hole.png')
+        self.image = pygame.image.load(getcwd() + '/Images/Hole/hole.png')
         self.rect = self.image.get_rect(topleft=position)
 
 
@@ -298,11 +294,11 @@ class Cosmetic(pygame.sprite.Sprite):
 class Coin(pygame.sprite.Sprite):
     def __init__(self, position: tuple):
         super().__init__()
-        frame_1 = pygame.image.load('Images/coin_1.png')
+        frame_1 = pygame.image.load(getcwd() + '/Images/Coin/coin_1.png')
         self.frames = [frame_1]
         i = 2
-        while path.exists('Images/coin_{}.png'.format(i)):
-            self.frames.append(pygame.image.load('Images/coin_{}.png'.format(i)).convert_alpha())
+        while path.exists('Images/Coin/coin_{}.png'.format(i)):
+            self.frames.append(pygame.image.load('Images/Coin/coin_{}.png'.format(i)).convert_alpha())
             i += 1
 
         self.image = frame_1
@@ -328,11 +324,11 @@ class Coin(pygame.sprite.Sprite):
 class Flag(pygame.sprite.Sprite):
     def __init__(self, num, midtop_hole_pos):
         super().__init__()
-        frame_1 = pygame.image.load('Images/level_{}_flag_1.png'.format(num)).convert_alpha()
+        frame_1 = pygame.image.load(getcwd() + '\Images\Flags\level_{}_flag_1.png'.format(num)).convert_alpha()
         self.frames = [frame_1]
         i = 2
-        while path.exists('Images/level_{}_flag_{}.png'.format(num, i)):
-            self.frames.append(pygame.image.load('Images/level_{}_flag_{}.png'.format(num, i)).convert_alpha())
+        while path.exists('/Images/level_{}_flag_{}.png'.format(num, i)):
+            self.frames.append(pygame.image.load('/Images/level_{}_flag_{}.png'.format(num, i)).convert_alpha())
             i += 1
 
         self.image = frame_1

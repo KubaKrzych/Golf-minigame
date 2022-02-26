@@ -1,9 +1,6 @@
-import sys
-import pygame
-from settings import *
-from objects import *
-from level import Level
-
+from src.objects import *
+from src.level import Level
+from os import getcwd
 
 class Golf:
 
@@ -14,8 +11,8 @@ class Golf:
         pygame.mixer.init()
         pygame.display.set_caption("Golf minigame")
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        self.font = pygame.font.Font('Other/pixelart.ttf', 60)
-        self.background = pygame.image.load('Images/title_screen.png').convert_alpha()
+        self.font = pygame.font.Font(getcwd() +  '\Data\Fonts\pixelart.ttf', 60)
+        self.background = pygame.image.load('Images/Background/title_screen.png').convert_alpha()
         # Variables
         self.running = True
         self.level = None
@@ -23,9 +20,9 @@ class Golf:
 
         # Configure level
         self.paths = {
-                      "level_1_banner": 'Images/level_1_banner.png',
-                      "level_2_banner": 'Images/level_2_banner.png',
-                      "level_3_banner": 'Images/level_3_banner.png',
+                      "level_1_banner": 'Images/Misc/level_1_banner.png',
+                      "level_2_banner": 'Images/Misc/level_2_banner.png',
+                      "level_3_banner": 'Images/Misc/level_3_banner.png',
                       }
         self.clock = pygame.time.Clock()
 

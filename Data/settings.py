@@ -1,4 +1,5 @@
 import math
+import os
 
 import pygame
 pygame.init()
@@ -19,15 +20,15 @@ MOVE_QUANTITY = 1.002  # If the ball moves on the ground, divide it's X vector b
 MAX_VECTOR_LENGTH = 65  # Max length of move vector, 65 is the golden mean
 MIN_VECTOR_LENGTH = 8
 GRAVITY = 4  # Gravity force
-STRONG_HIT_VECTORL = 40  # When the length of the vector is 40 or above, other sfx will play
-LIGHT_BOUNCE_VECTORL = 50
-MID_BOUNCE_VECTORL = 35
-HARD_BOUNCE_VECTORL = 20
+STRONG_HIT_VECTOR_LEN = 40  # When the length of the vector is 40 or above, other sfx will play
+LIGHT_BOUNCE_VECTOR_LEN = 50
+MID_BOUNCE_VECTOR_LEN = 35
+HARD_BOUNCE_VECTOR_LEN = 20
 MAX_SPEED = 70
 
 # Font
-FONT = pygame.font.Font('Other/pixelart.ttf', 60)
-TITLE = pygame.font.Font('Other/pixelart.ttf', 95)
+FONT = pygame.font.Font(os.getcwd() + '\Data\Fonts\pixelart.ttf', 60)
+TITLE = pygame.font.Font(os.getcwd() + '\Data\Fonts\pixelart.ttf', 95)
 
 # Colors
 

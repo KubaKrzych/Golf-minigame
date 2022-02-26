@@ -1,6 +1,5 @@
-import math
 import sys
-from settings import *
+from Data.settings import *
 
 
 # euclidean distance

@@ -1,9 +1,10 @@
 import csv
 import time
 
-from settings import *
-import pygame
-from objects import *
+import pygame.mixer
+
+from src.objects import *
+from os import getcwd
 
 
 class Level:
@@ -16,11 +17,12 @@ class Level:
         # Setup
         self.clock = pygame.time.Clock()
         self.screen = pygame.display.get_surface()
-        file = self.read_csv('Other/Map_{}.csv'.format(num))
+        self.hole_sound = pygame.mixer.Sound(getcwd() + '/Audio/hole_sound.wav')
+        file = self.read_csv('Data/Map_layouts/Map_{}.csv'.format(num))
 
         # Images
-        background = pygame.image.load('Images/level_{}_background.png'.format(num)).convert_alpha()
-        self.options_img = pygame.image.load('Images/options_background.png').convert_alpha()
+        background = pygame.image.load('Images/Background/level_{}_background.png'.format(num)).convert_alpha()
+        self.options_img = pygame.image.load(getcwd() + '/Images/Background/options_background.png').convert_alpha()
 
         # Instances
         self.prev_time = time.time()
@@ -137,7 +139,6 @@ class Level:
             self.draw_panel((WIDTH - 250, 100), "{} hits".format(self.ball.hit_count))
         else:
             self.draw_panel((WIDTH / 2, 100), "{} hits".format(self.ball.hit_count))
-        debug(length(self.ball.vector))
 
     def update_all(self, obstacle_group, player_group, delta_time, mouse_but, end):
         self.player.update(obstacle_group, player_group, delta_time, mouse_but, end)
@@ -205,8 +206,7 @@ class Level:
     def end_level(self):
         if self.ball_in_hole:
             # TODO stop theme music
-            pygame.mixer.music.load('Other/hole_sound.wav')
-            pygame.mixer.music.play(0)
+            self.hole_sound.play()
             fade = pygame.Surface((WIDTH, HEIGHT))
             fade.fill(('Black'))
             for alpha in range(255):
@@ -240,13 +240,13 @@ class Level:
 
     def get_highscore(self):
         try:
-            with open('Other/hs.txt', 'r') as file:
+            with open(getcwd() + '/Data/Score/hs.txt', 'r') as file:
                 lines = file.readlines()
                 self.highscore = int(lines[self.level_number - 1].strip())
 
         # The file doesn't exist
         except IOError:
-            with open('Other/hs.txt', 'w') as file:
+            with open(getcwd() + '/Data/Score/hs.txt', 'w') as file:
                 file.write("32000\n32000\n32000\n")
                 self.highscore = 32000
 
@@ -255,20 +255,25 @@ class Level:
     def set_highscore(self):
         if self.ball.hit_count < self.highscore and self.ball_in_hole:
             self.highscore = self.ball.hit_count
-            with open('Other/hs.txt', 'r') as file:
+
+            with open(getcwd() + '/Data/Score/hs.txt', 'r') as file:
                 score = file.readlines()
                 file.close()
+
             score = [i.strip() for i in score]
             score[self.level_number - 1] = str(self.highscore)
-            with open('Other/hs.txt', 'w') as file:
+
+            with open(getcwd() + '/Data/Score/hs.txt', 'w') as file:
                 for i in score:
                     file.write(str(i) + "\n")
                 file.close()
+
             return 1
+
         return 0
 
     def draw_panel(self, position: tuple, text: str, color='White'):
-        panel_background = pygame.image.load('Images/panel.png')
+        panel_background = pygame.image.load(getcwd() + '/Images/Misc/panel.png')
         text_surf = FONT.render(text, False, color)
         text_rect = text_surf.get_rect(center=position)
         # -5 and + 10 are given due to a border
