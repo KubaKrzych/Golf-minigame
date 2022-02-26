@@ -50,8 +50,10 @@ class Player(pygame.sprite.Sprite):
         self.in_collision = False
 
     def user_input(self, mouse_buttons):
+
         if mouse_buttons[0] and not self.in_move and self.in_collision and not self.click_pos:
             self.click_pos = pygame.mouse.get_pos()
+
         if self.click_pos and not mouse_buttons[0]:
             self.hit(pygame.mouse.get_pos())
 
@@ -62,8 +64,10 @@ class Player(pygame.sprite.Sprite):
     def current_angle_of_move(self):
         result = angle(self.vector, [1, 0])  # [1, 0] for x-axis normal vector
         quarter = vector_quarter(self.vector)
+
         if quarter > 2:
             result = radians(360) - result
+
         return result
 
     def move(self, delta_time):
@@ -126,7 +130,6 @@ class Player(pygame.sprite.Sprite):
         # If the ball touches the ground it decelerates
         if not self.in_air and self.in_move:
             self.vector[0] /= MOVE_QUANTITY
-        print(obstacles)
         for obstacle in obstacles:
             obstacle_rect = obstacle.rect
 
@@ -158,16 +161,15 @@ class Player(pygame.sprite.Sprite):
                 self.vector[1] /= QUANTITY
                 self.rect.x = obstacle_rect.x + TILE + 6
                 self.bounce_sound(True)
-            # TODO Obczaic rogi i wtedy odbic zmienic kierunek obu wektorow
+
+            # TODO fix bug when ball stays in the middle of a block
 
     def draw_vector(self):
-        # The statement below is up for a make-over
         if self.click_pos is not None and \
                 distance(self.click_pos, pygame.mouse.get_pos()) > HIT_QUANTITY * MIN_VECTOR_LENGTH:
             mouse_pos = pygame.mouse.get_pos()
 
-            # TODO mam funkcje po to co ponizej
-            vector = (self.click_pos[0] - mouse_pos[0], self.click_pos[1] - mouse_pos[1])
+            vector = vector_decomposition(mouse_pos, self.click_pos)
 
             if length(vector) >= MAX_VECTOR_LENGTH * HIT_QUANTITY:
                 vector_angle = inverted_angle(vector, [1, 0])
@@ -206,6 +208,7 @@ class Player(pygame.sprite.Sprite):
                 pygame.mixer.Channel(3).play(self.sounds["mid_bounce"])
             else:
                 pygame.mixer.Channel(3).play(self.sounds["light_bounce"])
+
         else:
             if side_collision:
                 if length(self.vector) >= HARD_BOUNCE_VECTOR_LEN:
@@ -245,6 +248,7 @@ class Player(pygame.sprite.Sprite):
 class Block(pygame.sprite.Sprite):
     def __init__(self, type_of_block, position: tuple, num: int):
         super().__init__()
+
         if type_of_block == 'B':
             self.image = pygame.image.load('Images/Blocks/block_{}.png'.format(num))
         elif type_of_block == 'W':
@@ -253,6 +257,7 @@ class Block(pygame.sprite.Sprite):
             self.image = pygame.image.load('Images/Blocks/ground_{}.png'.format(num))
         else:
             self.image = None
+
         self.rect = self.image.get_rect(topleft=position)
 
     def get_rect(self):
@@ -297,6 +302,7 @@ class Coin(pygame.sprite.Sprite):
         frame_1 = pygame.image.load(getcwd() + '/Images/Coin/coin_1.png')
         self.frames = [frame_1]
         i = 2
+
         while path.exists('Images/Coin/coin_{}.png'.format(i)):
             self.frames.append(pygame.image.load('Images/Coin/coin_{}.png'.format(i)).convert_alpha())
             i += 1
@@ -327,6 +333,7 @@ class Flag(pygame.sprite.Sprite):
         frame_1 = pygame.image.load(getcwd() + '\Images\Flags\level_{}_flag_1.png'.format(num)).convert_alpha()
         self.frames = [frame_1]
         i = 2
+
         while path.exists(getcwd() + '\Images\Flags\level_{}_flag_{}.png'.format(num, i)):
             self.frames.append(pygame.image.load(getcwd() + '\Images\Flags\level_{}_flag_{}.png'.format(num, i)).convert_alpha())
             i += 1
