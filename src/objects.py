@@ -126,12 +126,12 @@ class Player(pygame.sprite.Sprite):
         # If the ball touches the ground it decelerates
         if not self.in_air and self.in_move:
             self.vector[0] /= MOVE_QUANTITY
-
+        print(obstacles)
         for obstacle in obstacles:
             obstacle_rect = obstacle.rect
 
             # Ball hits the block from the top
-            if Block.get_top(obstacle_rect, 16, 8).colliderect(Block.get_bottom(self.rect, 24, 12)) and self.vector[1] > 0:
+            if Block.get_top(obstacle_rect, 16, 8).colliderect(Block.get_bottom(self.rect, 22, 12)) and self.vector[1] > 0:
                 self.vector[1] = self.vector[1] // Y_QUANTITY * (-1)
                 self.vector[0] /= QUANTITY
                 self.rect.y = obstacle_rect.y - TILE + 1
@@ -139,24 +139,24 @@ class Player(pygame.sprite.Sprite):
                 self.bounce_sound(False)
 
             # Ball hits the block from the bottom
-            if Block.get_bottom(obstacle_rect, 16, 8).colliderect(Block.get_top(self.rect, 24, 12)) and self.vector[1] < 0:
+            if Block.get_bottom(obstacle_rect, 16, 8).colliderect(Block.get_top(self.rect, 22, 12)) and self.vector[1] < 0:
                 self.vector[1] = self.vector[1] // Y_QUANTITY * (-1)
                 self.vector[0] /= QUANTITY
-                self.rect.y = obstacle_rect.y + TILE + 2
+                self.rect.y = obstacle_rect.y + TILE + 1
                 self.bounce_sound(False)
 
             # Ball hits the block from the left
-            if Block.get_left(obstacle_rect, 16, 8).colliderect(Block.get_right(self.rect, 24, 12)) and self.vector[0] > 0:
+            if Block.get_left(obstacle_rect, 16, 8).colliderect(Block.get_right(self.rect, 22, 12)) and self.vector[0] > 0:
                 self.vector[0] = self.vector[0] // X_QUANTITY * (-1)
                 self.vector[1] /= QUANTITY
-                self.rect.x = obstacle_rect.x - TILE - 4
+                self.rect.x = obstacle_rect.x - TILE - 6
                 self.bounce_sound(True)
 
             # Ball hits the block from the right
-            if Block.get_right(obstacle_rect, 16, 8).colliderect(Block.get_left(self.rect, 24, 12)) and self.vector[0] < 0:
+            if Block.get_right(obstacle_rect, 16, 8).colliderect(Block.get_left(self.rect, 22, 12)) and self.vector[0] < 0:
                 self.vector[0] = self.vector[0] // X_QUANTITY * (-1)
                 self.vector[1] /= QUANTITY
-                self.rect.x = obstacle_rect.x + TILE + 4
+                self.rect.x = obstacle_rect.x + TILE + 6
                 self.bounce_sound(True)
             # TODO Obczaic rogi i wtedy odbic zmienic kierunek obu wektorow
 
@@ -327,8 +327,8 @@ class Flag(pygame.sprite.Sprite):
         frame_1 = pygame.image.load(getcwd() + '\Images\Flags\level_{}_flag_1.png'.format(num)).convert_alpha()
         self.frames = [frame_1]
         i = 2
-        while path.exists('/Images/level_{}_flag_{}.png'.format(num, i)):
-            self.frames.append(pygame.image.load('/Images/level_{}_flag_{}.png'.format(num, i)).convert_alpha())
+        while path.exists(getcwd() + '\Images\Flags\level_{}_flag_{}.png'.format(num, i)):
+            self.frames.append(pygame.image.load(getcwd() + '\Images\Flags\level_{}_flag_{}.png'.format(num, i)).convert_alpha())
             i += 1
 
         self.image = frame_1
