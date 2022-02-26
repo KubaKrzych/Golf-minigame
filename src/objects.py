@@ -103,12 +103,13 @@ class Player(pygame.sprite.Sprite):
         self.user_input(mouse_buttons)
         self.draw_vector()
         self.check_movement()
+        self.collide(obstacle_group, player_group)
         if self.in_move:
             self.gravity()
             for i in range(self.iterations):
+                self.check_movement()
                 self.move(delta_time)
                 self.collide(obstacle_group, player_group)
-                self.check_movement()
                 self.animation()
 
     def animation(self):
@@ -161,8 +162,6 @@ class Player(pygame.sprite.Sprite):
                 self.vector[1] /= QUANTITY
                 self.rect.x = obstacle_rect.x + TILE + 6
                 self.bounce_sound(True)
-
-            # TODO fix bug when ball stays in the middle of a block
 
     def draw_vector(self):
         if self.click_pos is not None and \
