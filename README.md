@@ -1,3 +1,31 @@
 # Golf game
 
-##
+## About
+
+Between the first semester and the second one at Warsaw University of Technology, I've decided to take up the biggest 
+project I've done so far. Just because I love maths and physics, I've decided to make a game that uses
+that knowledge. Golf game uses it all. Everything but audio is made by myself.
+
+The only technologies I used are **Python** and **pygame**.
+
+Pygame is not an internal library, so you will need to make sure to install it. You can do it running one of these
+commands:
+
+**_Windows_**
+
+`py -m pygame.examples.aliens`
+
+**_Mac Os_**
+
+`python3 -m pip install -U pygame --user`
+
+## How to run it
+
+All you need to do is run `main.py`.
+
+## Instruction
+
+The game is self-explanatory. All you need to know is that you can reset level with `R` and go back to main menu with 
+`ESC` key. To move your ball you basically need to _draw_ a vector.
+
+If you find a bug, just let me know. I will fix it right away! 
