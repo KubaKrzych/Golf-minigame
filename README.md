@@ -8,17 +8,6 @@ that knowledge. Golf game uses it all. Everything but audio is made by myself.
 
 The only technologies I used are **Python** and **pygame**.
 
-Pygame is not an internal library, so you will need to make sure to install it. You can do it running one of these
-commands:
-
-**_Windows_**
-
-`py -m pygame.examples.aliens`
-
-**_Mac Os_**
-
-`python3 -m pip install -U pygame --user`
-
 ## How to run it
 
 All you need to do is run `main.py`.
