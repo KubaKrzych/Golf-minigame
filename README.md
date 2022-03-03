@@ -3,7 +3,7 @@
 ## About
 
 Between the first semester and the second one at Warsaw University of Technology, I've decided to take up the biggest 
-project I've done so far. Just because I love maths and physics, I've decided to make a game that uses
+project I've done so far. Just because I love maths and physics, I've decided to make a game that makes use of
 that knowledge. Golf game uses it all. Everything but audio is made by myself.
 
 The only technologies I used are **Python** and **pygame**.
