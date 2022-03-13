@@ -10,7 +10,7 @@ The only technologies I used are **Python** and **pygame**.
 
 ## How to run it
 
-Firstly, make sure you've got python installed!
+Firstly, make sure you've got python installed! Then, clone the repository and do as follows:
 
 ```
 pip install pygame
