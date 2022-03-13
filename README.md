@@ -12,11 +12,11 @@ The only technologies I used are **Python** and **pygame**.
 
 Firstly, make sure you've got python installed!
 
-"""
+```
 pip install pygame
 cd Golf-minigame
 python main.py
-"""
+```
 
 ## Instruction
 
