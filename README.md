@@ -10,7 +10,13 @@ The only technologies I used are **Python** and **pygame**.
 
 ## How to run it
 
-All you need to do is run `main.py`.
+Firstly, make sure you've got python installed!
+
+"""
+pip install pygame
+cd Golf-minigame
+python main.py
+"""
 
 ## Instruction
 
