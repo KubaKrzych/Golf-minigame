@@ -10,6 +10,8 @@ The only technologies I used are **Python** and **pygame**.
 
 ## How to run it
 
+First of all, if you do not wish to clone the repository and follow instructions below, you can simply watch a little video I recorder that previews most of the features I've implemented. You can click [here](https://www.youtube.com/watch?v=SookIx5zcTM), to get to youtube and watch it.
+
 Firstly, make sure you've got python installed! Then, clone the repository and do as follows:
 
 ```
