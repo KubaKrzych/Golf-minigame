@@ -9,8 +9,10 @@ that knowledge. Golf game uses it all. Everything but audio is made by myself.
 The only technologies I used are **Python** and **pygame**.
 
 ## How to run it
+Here's a link where you can watch me run the code and preview some of the featuers implemented:
+https://youtu.be/SookIx5zcTM
 
-First of all, if you do not wish to clone the repository and follow instructions below, you can simply watch a little video I recorder that previews most of the features I've implemented. You can click [here](https://www.youtube.com/watch?v=SookIx5zcTM), to get to youtube and watch it.
+Otherwise, if you want to check it yourself:
 
 Firstly, make sure you've got python installed! Then, clone the repository and do as follows:
 
