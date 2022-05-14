@@ -10,7 +10,7 @@ The only technologies I used are **Python** and **pygame**.
 
 ## How to run it
 Here's a link where you can watch me run the code and preview some of the featuers implemented:
-https://youtu.be/SookIx5zcTM
+[Link to the video!](youtu.be/V2uj7i7OpPQ)
 
 Otherwise, if you want to check it yourself:
 
